@@ -13,8 +13,9 @@ from app.core.database import Base, get_db
 from app.models.user import User
 from app.models.role import Role
 from app.models.offer import Offer, OfferStatus
+import os
 
-TEST_DATABASE_URL = settings.database_url
+TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", settings.database_url)
 
 # ----------------------------------------------------------------------
 # 1. Configuration du Moteur Async (Scope Function)

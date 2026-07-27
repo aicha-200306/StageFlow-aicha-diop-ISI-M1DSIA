@@ -11,6 +11,20 @@ jobs:
     permissions:
       contents: read
       packages: write
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: stageflow_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
 
@@ -22,14 +36,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov aiosqlite aiosqlite
+          pip install pytest pytest-cov
 
       - name: Run tests
         env:
-          
-          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
-          SECRET_KEY: "test-secret-key-for-ci"
-          ALGORITHM: "HS256"
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/stageflow_ci
+          TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/stageflow_ci
+          SECRET_KEY: test-secret-key-for-ci
+          ALGORITHM: HS256
         run: pytest --cov=app --cov-report=xml
 
       - name: Upload coverage
