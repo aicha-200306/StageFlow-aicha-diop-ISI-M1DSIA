@@ -68,6 +68,6 @@ Le dépôt d'une candidature à une offre publiée, réservé au rôle `student`
 
 La documentation OpenAPI complète, détaillant les schémas de requête et de réponse ainsi que les codes d'erreur possibles pour chaque route, est disponible directement sur `/docs` une fois l'application lancée.
 
-## Limites connues
+## Limites observees
 
 Le middleware de limitation de débit conserve ses compteurs de requêtes en mémoire du processus applicatif. Cette approche fonctionne correctement tant qu'une seule instance de l'application tourne, mais ne serait pas partagée entre plusieurs instances dans un déploiement en production comportant plusieurs workers ou plusieurs conteneurs répliqués ; un store partagé, par exemple Redis, serait alors nécessaire. Par ailleurs, la bibliothèque `passlib` déclenche un avertissement de dépréciation concernant le module `crypt` sous Python 3.13 et versions ultérieures, sans que cela n'affecte le fonctionnement actuel de l'application.
